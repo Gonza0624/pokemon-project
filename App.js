@@ -1,20 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Text, TouchableOpacity } from "react-native";
+import Home from "./screens/Home";
+import Info from "./screens/Info";
+import Favorites from "./screens/Favorites";
+import AddRemoveFavoriteButton from "./components/AddRemoveFavoriteButton";
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={({ navigation }) => ({
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Favorites")}
+                style={{ marginRight: 15 }}
+              >
+                <Text
+                  style={{
+                    color: "#000",
+                    fontSize: 17,
+                    letterSpacing: 0.35,
+                  }}
+                >
+                  Favorites
+                </Text>
+              </TouchableOpacity>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="Info"
+          component={Info}
+          options={{
+            headerRight: () => <AddRemoveFavoriteButton />,
+          }}
+        />
+        <Stack.Screen name="Favorites" component={Favorites} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
